@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -147,7 +148,10 @@ fun ResultScreen() {
                         modifier = Modifier.size(30.dp)
                     )
                     Text(text = "WIND")
-                    Text(text = String.format("%.2f", windSpeed)+" KM/H") // Show the wind speed
+                    Text(
+                        text = String.format("%.2f", windSpeed)+"\nKM/H",
+                        textAlign = TextAlign.Center
+                    ) // Show the wind speed
                 }
             }
         }
