@@ -1,5 +1,5 @@
 // This is the package name for your app.
-package com.kaushik.weatherapp
+package com.kaushik.weatherapp.screens
 
 // Import the necessary libraries.
 import androidx.compose.foundation.layout.Box

@@ -1,4 +1,4 @@
-package com.kaushik.weatherapp
+package com.kaushik.weatherapp.screens
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -22,13 +22,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.google.gson.Gson
-import java.time.Instant
-import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.util.regex.Pattern
+import com.kaushik.weatherapp.R
+import com.kaushik.weatherapp.getCurrentTimeInTimeZone
+import com.kaushik.weatherapp.getDescription
+import com.kaushik.weatherapp.getIcon
+import com.kaushik.weatherapp.getSpecifiedTimeInTimeZone
+import com.kaushik.weatherapp.jsonToMap
 
 @Composable
 fun ResultScreen() {
@@ -165,81 +164,3 @@ fun ResultScreen() {
         }
     }
 }
-
-
-// A function to convert a JSON string to a map.
-fun jsonToMap(json: String): Map<*, *>? {
-    // Create a Gson object.
-    val gson = Gson()
-
-    // Return the JSON string deserialized as a map.
-    return gson.fromJson(json, Map::class.java)
-}
-
-// A function to get the current time in a given timezone.
-fun getCurrentTimeInTimeZone(timezoneOffset: Int): String {
-    // Create a ZoneOffset object from the timezone offset.
-    val zoneOffset = ZoneOffset.ofTotalSeconds(timezoneOffset)
-
-    // Create a ZoneId object from the timezone offset.
-    val zoneId = ZoneId.ofOffset("GMT", zoneOffset)
-
-    // Get the current time in the given timezone.
-    val zonedDateTime = ZonedDateTime.now(zoneId)
-
-    // Convert the zonedDateTime to a LocalDateTime.
-    val localTime = zonedDateTime.toLocalDateTime()
-
-    // Create a DateTimeFormatter object to format the time.
-    val formatter = DateTimeFormatter.ofPattern("hh:mm a")
-
-    // Return the formatted time.
-    return localTime.format(formatter)
-}
-
-// A function to get the time at a specified timestamp in a given timezone.
-fun getSpecifiedTimeInTimeZone(timezoneOffset: Int, timestamp: Long): String {
-    // Create a ZoneOffset object from the timezone offset.
-    val zoneOffset = ZoneOffset.ofTotalSeconds(timezoneOffset)
-
-    // Create a ZoneId object from the timezone offset.
-    val zoneId = ZoneId.ofOffset("GMT", zoneOffset)
-
-    // Create a ZonedDateTime object from the timestamp and timezone.
-    val zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond(timestamp), zoneId)
-
-    // Create a DateTimeFormatter object to format the time.
-    val formatter = DateTimeFormatter.ofPattern("hh:mm a")
-
-    // Return the formatted time.
-    return zonedDateTime.format(formatter)
-}
-
-// A function to extract the icon from a weather forecast string.
-fun getIcon(sampleString: String): String? {
-    // Create a regular expression pattern to match the icon.
-    val pattern = Pattern.compile("icon=([0-9a-z]+)")
-
-    // Create a Matcher object to match the pattern against the input string.
-    val matcher = pattern.matcher(sampleString)
-
-    // If the pattern matches, return the icon. Otherwise, return null.
-    return if (matcher.find()) {
-        matcher.group(1)
-    } else {
-        null
-    }
-}
-
-// A function to extract the description from a weather forecast string.
-fun getDescription(input: String): String? {
-    // Create a regular expression pattern to match the description.
-    val regex = """description=(.*?),""".toRegex()
-
-    // Create a MatchResult object to match the pattern against the input string.
-    val matchResult = regex.find(input)
-
-    // If the pattern matches, return the description. Otherwise, return null.
-    return matchResult?.groups?.get(1)?.value
-}
-

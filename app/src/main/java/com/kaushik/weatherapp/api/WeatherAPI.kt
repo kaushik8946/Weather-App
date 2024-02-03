@@ -1,4 +1,4 @@
-package com.kaushik.weatherapp
+package com.kaushik.weatherapp.api
 
 import okhttp3.OkHttpClient
 import okhttp3.Request

@@ -1,4 +1,6 @@
-package com.kaushik.weatherapp
+package com.kaushik.weatherapp.screens
+
+import com.kaushik.weatherapp.R
 
 interface Destinations {
     val route: String // The route of the destination.

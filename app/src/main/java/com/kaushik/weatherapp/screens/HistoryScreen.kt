@@ -1,4 +1,4 @@
-package com.kaushik.weatherapp
+package com.kaushik.weatherapp.screens
 
 import android.content.Context
 import androidx.compose.foundation.layout.Box
