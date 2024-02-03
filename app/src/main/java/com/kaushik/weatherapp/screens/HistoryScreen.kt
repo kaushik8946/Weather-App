@@ -1,6 +1,6 @@
 package com.kaushik.weatherapp.screens
 
-import android.content.Context
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,32 +10,42 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.kaushik.weatherapp.roomDB.City
+import com.kaushik.weatherapp.roomDB.CityDatabase
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
+var citiesList = mutableStateOf(listOf<City>())
+
+@SuppressLint("CoroutineCreationDuringComposition")
+@OptIn(ExperimentalMaterialApi::class, DelicateCoroutinesApi::class)
 @Composable
-fun HistoryScreen(navController: NavHostController) {
-    // Get the shared preferences to access the list of cities
+fun HistoryScreen(navController: NavHostController, db: CityDatabase) {
     val context = LocalContext.current
-    val sharedPreferences = context.getSharedPreferences("data", Context.MODE_PRIVATE)
-    val citiesSet: MutableSet<String>? = sharedPreferences.getStringSet("cityList", setOf())
-    val citiesList: List<String> = citiesSet?.toList() ?: emptyList()
-
+    GlobalScope.launch {
+        citiesList = mutableStateOf(db.cityDao().getCities())
+    }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp)
     ) {
-        // If there are no cities in the history, show a message
         item {
-            if (citiesList.isEmpty()) {
+            if (citiesList.value.isEmpty()) {
                 Text(
                     text = "No history found",
                     fontSize = 20.sp
@@ -47,11 +57,10 @@ fun HistoryScreen(navController: NavHostController) {
                 )
             }
 
-            // Iterate over the list of cities and show a card for each city
-            citiesList.forEach { city ->
+            citiesList.value.forEach { city ->
                 Card(
                     onClick = {
-                        validate(context, navController, city)
+                        validate(context, city.name, db, navController)
                     },
                     modifier = Modifier
                         .padding(vertical = 10.dp)
@@ -62,12 +71,23 @@ fun HistoryScreen(navController: NavHostController) {
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(
-                            text = city,
+                            text = city.name,
                             modifier = Modifier
                                 .padding(start = 20.dp)
                                 .align(Alignment.CenterStart),
                             fontSize = 20.sp
                         )
+                        IconButton(
+                            onClick = {
+                                GlobalScope.launch {
+                                    db.cityDao().delete(city)
+                                    citiesList.value = db.cityDao().getCities()
+                                }
+                            },
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                        ) {
+                            Icon(imageVector = Icons.Filled.Delete, contentDescription = "")
+                        }
                     }
                 }
             }

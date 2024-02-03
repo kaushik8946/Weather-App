@@ -3,9 +3,9 @@ package com.kaushik.weatherapp.screens
 import com.kaushik.weatherapp.R
 
 interface Destinations {
-    val route: String // The route of the destination.
-    val icon: Int // The icon of the destination.
-    val title: String // The title of the destination.
+    val route: String
+    val icon: Int
+    val title: String
 }
 
 object Search : Destinations {

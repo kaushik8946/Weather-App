@@ -31,58 +31,41 @@ import com.kaushik.weatherapp.jsonToMap
 
 @Composable
 fun ResultScreen() {
-    // Get the shared preferences to access the result
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("data", Context.MODE_PRIVATE)
     val result = sharedPreferences.getString("result", null)
 
-    // If there is a result, show it
     if (result != null) {
-        // Parse the JSON result into a map
         val allData = jsonToMap(result.toString())
-
-        // Get the city name
         val city = allData?.get("name").toString().uppercase()
-
-        // Get the main weather data
         val mainData = jsonToMap(allData?.get("main").toString())
-
-        // Get the weather data
         var weather = allData?.get("weather").toString()
         weather = weather.substring(1, weather.length - 1)
-
-        // Try to get the weather icon from the weather data
         val icon = try {
             val weatherData = jsonToMap(weather)
-            weatherData?.get("icon").toString() // Try to get the icon from the weather data
+            weatherData?.get("icon").toString()
         } catch (e: Exception) {
-            getIcon(weather).toString() // If the icon is not available, get it from the weather description
+            getIcon(weather).toString()
         }
 
-        // Get the weather description
         val description = try {
             val weatherData = jsonToMap(weather)
-            weatherData?.get("description").toString() // Try to get the description from the weather data
+            weatherData?.get("description").toString()
         } catch (e: Exception) {
-            getDescription(weather).toString() // If the description is not available, get it from the weather
+            getDescription(weather).toString()
         }
 
-        // Get the time zone offset
         val timeZone = allData?.get("timezone").toString().toDouble().toInt()
 
-        // Get the current time in the time zone
         val time = getCurrentTimeInTimeZone(timeZone)
 
-        // Get the sunrise and sunset times
         val sysData = jsonToMap(allData?.get("sys").toString())
         val sunrise = sysData?.get("sunrise").toString().toDouble().toLong()
         val sunset = sysData?.get("sunset").toString().toDouble().toLong()
 
-        // Get the sunrise and sunset times in the time zone
         val sunriseTime = getSpecifiedTimeInTimeZone(timeZone, sunrise)
         val sunsetTime = getSpecifiedTimeInTimeZone(timeZone, sunset)
 
-        // Get the wind speed
         val wind = jsonToMap(allData?.get("wind").toString())
         val windSpeed = wind?.get("speed").toString().toDouble() * (18 / 5) // Get Wind speed in KM/h
 
@@ -95,16 +78,16 @@ fun ResultScreen() {
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = city, fontSize = 20.sp) // Show the city name
-            Text(text = time, fontSize = 20.sp) // Show the current time
-            val iconurl = "https://openweathermap.org/img/wn/$icon@4x.png" // Get the URL of the weather icon
+            Text(text = city, fontSize = 20.sp)
+            Text(text = time, fontSize = 20.sp)
+            val iconurl = "https://openweathermap.org/img/wn/$icon@4x.png"
             AsyncImage(
-                model = iconurl, // The URL of the image
+                model = iconurl,
                 contentDescription = "icon",
                 modifier = Modifier.size(300.dp)
-            ) // Show the weather icon
-            val temp = mainData?.get("temp").toString().toDouble() - 273.15 // Get the temperature in Celsius
-            Text(text = String.format("%.2f", temp) + "°C", fontSize = 40.sp) // Show the temperature
+            )
+            val temp = mainData?.get("temp").toString().toDouble() - 273.15
+            Text(text = String.format("%.2f", temp) + "°C", fontSize = 40.sp)
             Text(text = description.uppercase(), fontSize = 24.sp)
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -116,12 +99,12 @@ fun ResultScreen() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.sunrise), // The image of the sunrise
+                        painter = painterResource(id = R.drawable.sunrise),
                         contentDescription = "sunrise",
                         modifier = Modifier.size(30.dp)
                     )
                     Text(text = "SUNRISE")
-                    Text(text = sunriseTime) // Show the sunrise time
+                    Text(text = sunriseTime)
                 }
                 Column(
                     modifier = Modifier.fillMaxWidth(.3f),
@@ -129,12 +112,12 @@ fun ResultScreen() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.sunset), // The image of the sunset
+                        painter = painterResource(id = R.drawable.sunset),
                         contentDescription = "sunset",
                         modifier = Modifier.size(30.dp)
                     )
-                    Text(text = "SUNSET") // Show the text "SUNSET"
-                    Text(text = sunsetTime) // Show the sunset time
+                    Text(text = "SUNSET")
+                    Text(text = sunsetTime)
                 }
                 Column(
                     modifier = Modifier.fillMaxWidth(.3f),
@@ -142,7 +125,7 @@ fun ResultScreen() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.wind), // The image of the wind
+                        painter = painterResource(id = R.drawable.wind),
                         contentDescription = "wind",
                         modifier = Modifier.size(30.dp)
                     )
@@ -150,7 +133,7 @@ fun ResultScreen() {
                     Text(
                         text = String.format("%.2f", windSpeed)+"\nKM/H",
                         textAlign = TextAlign.Center
-                    ) // Show the wind speed
+                    )
                 }
             }
         }
