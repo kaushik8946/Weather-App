@@ -22,6 +22,7 @@ https://github.com/kaushik8946/Weather-App/assets/109019850/969c467a-12d0-4dd1-8
 - Jetpack Compose
 - Firebase
 - Rest API- OkHttp
+- RoomDB(SQLite)
 
 # API Used
 **OpenWeather** - To get an API key, click [here](https://home.openweathermap.org/api_keys).
