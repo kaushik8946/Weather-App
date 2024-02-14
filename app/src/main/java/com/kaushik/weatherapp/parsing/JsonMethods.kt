@@ -1,4 +1,4 @@
-package com.kaushik.weatherapp
+package com.kaushik.weatherapp.parsing
 
 import com.google.gson.Gson
 import java.util.regex.Pattern

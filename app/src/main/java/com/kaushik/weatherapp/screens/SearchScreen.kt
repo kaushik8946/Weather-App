@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.kaushik.weatherapp.api.WeatherAPI
+import com.kaushik.weatherapp.parsing.capitalizeFirstLetterOfEachWord
 import com.kaushik.weatherapp.roomDB.City
 import com.kaushik.weatherapp.roomDB.CityDatabase
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -92,13 +93,4 @@ fun validate(
     } else {
         Toast.makeText(context, response!!.second, Toast.LENGTH_SHORT).show()
     }
-}
-
-fun capitalizeFirstLetterOfEachWord(sentence: String): String {
-    return sentence.split(" ").joinToString(" ") { capitalizeFirstLetter(it) }
-
-}
-
-fun capitalizeFirstLetter(word: String): String {
-    return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase()
 }

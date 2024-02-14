@@ -23,11 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.kaushik.weatherapp.R
-import com.kaushik.weatherapp.getCurrentTimeInTimeZone
-import com.kaushik.weatherapp.getDescription
-import com.kaushik.weatherapp.getIcon
-import com.kaushik.weatherapp.getSpecifiedTimeInTimeZone
-import com.kaushik.weatherapp.jsonToMap
+import com.kaushik.weatherapp.parsing.getCurrentTimeInTimeZone
+import com.kaushik.weatherapp.parsing.getDescription
+import com.kaushik.weatherapp.parsing.getIcon
+import com.kaushik.weatherapp.parsing.getSpecifiedTimeInTimeZone
+import com.kaushik.weatherapp.parsing.jsonToMap
 
 @Composable
 fun ResultScreen() {

@@ -1,4 +1,4 @@
-package com.kaushik.weatherapp
+package com.kaushik.weatherapp.parsing
 
 import java.time.Instant
 import java.time.ZoneId
